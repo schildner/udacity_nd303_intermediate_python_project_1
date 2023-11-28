@@ -29,13 +29,13 @@ class TestLoadNEOs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.neos = load_neos(TEST_NEO_FILE)
-        cls.neos_by_designation = {neo.designation: neo for neo in cls.neos}
+        cls.neos_by_designation = {neo.designation: neo for neo in cls.neos.values()}
 
     @classmethod
     def get_first_neo_or_none(cls):
         try:
             # Don't use __getitem__ in case the object is a set or a stream.
-            return next(iter(cls.neos))
+            return next(iter(cls.neos.values()))
         except StopIteration:
             return None
 
