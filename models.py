@@ -89,16 +89,16 @@ class CloseApproach:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, neo, time, distance, velocity):
+    def __init__(self, designation, time, distance, velocity, neo=None):
         """Create a new `CloseApproach`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        # TODO: Assign information from the arguments passed to the constructor
+        # TODO-> DONE: Assign information from the arguments passed to the constructor
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = neo.designation
+        self._designation = designation
         # TODO-> DONE: Use the cd_to_datetime function for this attribute.
         self.time = cd_to_datetime(time)
         self.distance = distance
