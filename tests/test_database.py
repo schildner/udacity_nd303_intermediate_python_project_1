@@ -37,18 +37,18 @@ class TestDatabase(unittest.TestCase):
             self.assertIsNotNone(approach.neo)
 
     def test_database_construction_ensures_each_neo_has_an_approaches_attribute(self):
-        for neo in self.neos:
+        for neo in self.neos.values():
             self.assertTrue(hasattr(neo, 'approaches'))
 
     def test_database_construction_ensures_neos_collectively_exhaust_approaches(self):
         approaches = set()
-        for neo in self.neos:
+        for neo in self.neos.values():
             approaches.update(neo.approaches)
         self.assertEqual(approaches, set(self.approaches))
 
     def test_database_construction_ensures_neos_mutually_exclude_approaches(self):
         seen = set()
-        for neo in self.neos:
+        for neo in self.neos.values():
             for approach in neo.approaches:
                 if approach in seen:
                     self.fail(f"{approach} appears in the approaches of multiple NEOs.")
