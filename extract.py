@@ -24,14 +24,20 @@ def load_neos(neo_csv_path):
     :param neo_csv_path: A path to a CSV file containing data about near-Earth objects.
     :return: A collection of `NearEarthObject`s.
     """
-    neos = []
+    neos = {}
     # TODO-> DONE: Load NEO data from the given CSV file.
     with open(neo_csv_path) as f:
         reader = csv.reader(f)
-        next(reader)  # skips header
+        next(reader)  # skips header row
         for row in reader:
-            neo = NearEarthObject()
-            neos.append(neo)
+            # primary designation, hazardous, name (sometimes missing), diameter (sometimes missing)
+            pdes = row[3]
+            phe = True if row[7] == 'Y' else False
+            name = row[4] if row[4] != '' else None
+            diameter = row[15] if row[15] != '' else 'nan'
+
+            neo = NearEarthObject(pdes, phe, name, diameter)
+            neos[pdes] = neo
 
     return neos
 
@@ -50,12 +56,12 @@ def load_approaches(cad_json_path):
         approaches_rawdata = cad_map['data']
 
     for row in approaches_rawdata:
-        # Interested only in subset of csv columns:
-        primary_designation = row[0]  # des column
-        approach_datetime = row[3]    # cd column
-        approach_distance = row[4]    # dist column
-        relative_velocity = row[7]    # v_rel column
-        ca = CloseApproach(primary_designation, approach_datetime, approach_distance, relative_velocity)
+        # Interested only in subset of items in cad list:
+        primary_designation = row[0]  # des item
+        approach_datetime = row[3]    # cd item
+        approach_distance = row[4]    # dist item
+        relative_velocity = row[7]    # v_rel item
+        ca = CloseApproach(primary_designation, approach_datetime, float(approach_distance), float(relative_velocity))
         close_approaches.append(ca)
 
     return close_approaches

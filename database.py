@@ -43,8 +43,24 @@ class NEODatabase:
         self._approaches = approaches
 
         # TODO: What additional auxiliary data structures will be useful?
+        self._name_to_primary_designation_map = {}
+        named_neos = filter(lambda n: n.name is not None, self._neos.values())
+        for neo in list(named_neos):
+            self._name_to_primary_designation_map[neo.name] = neo.designation
 
-        # TODO: Link together the NEOs and their close approaches.
+        # Memoization so lookup in neos for each close approach is avoided!!! #later :-)
+
+        # TODO-> DONE: Link together the NEOs and their close approaches.
+        # CloseApproaches when loaded contain only primary_designation,
+        # and not the real NEO. Now we have both collections so we can
+        # to assign the neo objects to close_approaches.
+        for close_approach in self._approaches:
+            designation = close_approach._designation
+            neo = self._neos.get(designation)
+            # Create a link to the real neo object.
+            close_approach.neo = neo
+            # Also the approach belongs to list of neo's approaches.
+            neo.approaches.append(close_approach)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
@@ -59,8 +75,8 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # TODO: Fetch an NEO by its primary designation.
-        return None
+        # TODO-> DONE: Fetch an NEO by its primary designation.
+        return self._neos.get(designation, None)
 
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name.
@@ -76,8 +92,13 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
-        return None
+        # TODO-> DONE: Fetch an NEO by its name.
+        result = None
+        designation = self._name_to_primary_designation_map.get(name, None)
+        if designation is not None:
+            result = self._neos[designation]
+
+        return result
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.

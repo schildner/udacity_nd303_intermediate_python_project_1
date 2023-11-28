@@ -36,7 +36,7 @@ class NearEarthObject:
     # If you make changes, be sure to update the comments in this file.
     # DONE: variadic keyword **info param removed,
     #       introduced positional params for mandatory data, incl. defaults for optional.
-    def __init__(self, designation, hazardous, name=None, diameter=float('nan')):
+    def __init__(self, designation, hazardous, name=None, diameter='nan'):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
@@ -47,9 +47,9 @@ class NearEarthObject:
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
         self.designation = designation
-        self.name = name
-        self.diameter = diameter
         self.hazardous = hazardous
+        self.name = name
+        self.diameter = float(diameter)
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -65,8 +65,7 @@ class NearEarthObject:
         # TODO-> DONE: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f"A NearEarthObject {self.fullname} has a diameter of {self.diameter:.3f} and \
-            {'is' if self.hazardous else 'is not'} potentially hazardous."
+        return f"A NearEarthObject {self.fullname} has a diameter of {self.diameter:.3f} and {'is' if self.hazardous else 'is not'} potentially hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
