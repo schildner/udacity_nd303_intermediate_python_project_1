@@ -109,7 +109,40 @@ def create_filters(
     :return: A collection of filters for use with `query`.
     """
     # TODO: Decide how you will represent your filters.
-    return ()
+    #
+    # NOTES to myself:
+    # - Filters vary:
+    #   * CloseApproach object filters:
+    #     1. distance (float)
+    #     2. velocity (float)
+    #   * NEO object filters:
+    #     1. diameter (float)
+    #     2. hazardous (bool)
+    #   * Date / Datetime filters:
+    #     1. date
+    filters = []
+    if distance_min is not None:
+        f_distance_min = ApproachDistanceFilter(operator.ge, distance_min)
+        filters.append(f_distance_min)
+    # if distance_max is not None:
+    #     f_distance_max = ApproachDistanceFilter(operator.le, diameter_max)
+    #     filters.append(f_distance_max)
+    # if velocity_min is not None:
+    #     f_velocity_min = ApproachVelocityFilter(operator.ge, velocity_min)
+    #     filters.append(f_velocity_min)
+    # if velocity_max is not None:
+    #     f_velocity_max = ApproachVelocityFilter(operator.le, velocity_max)
+    #     filters.append(f_velocity_max)
+    # if diameter_min is not None:
+    #     f_diameter_min = NeoDiameterFilter(operator.ge, diameter_min)
+    #     filters.append(f_diameter_min)
+    # # if diameter_max is not None:
+    #     f_diameter_max = NeoDiameterFilter(operator.le, diameter_max)
+    #     filters.append(f_diameter_max)
+    # if hazardous is not None:
+    #     f_hazardous = NeoHazardousFilter(operator.eq, hazardous)
+    #     filters.append(f_hazardous)
+    return filters
 
 
 def limit(iterator, n=None):
@@ -123,3 +156,43 @@ def limit(iterator, n=None):
     """
     # TODO: Produce at most `n` values from the given iterator.
     return iterator
+
+
+class NeoDiameterFilter(AttributeFilter):
+    # Beware: Diameter is often 'nan' - so value must be checked/handled accordingly
+    def __init__(self, op, value):
+        super().__init__(op, value)
+
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.diameter
+
+
+class NeoHazardousFilter(AttributeFilter):
+
+    def __init__(self, op, value):
+        super().__init__(op, value)
+
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.hazardous
+
+
+class ApproachDistanceFilter(AttributeFilter):
+
+    def __init__(self, op, value):
+        super().__init__(op, value)
+
+    @classmethod
+    def get(cls, approach):
+        return approach.distance
+
+
+class ApproachVelocityFilter(AttributeFilter):
+
+    def __init__(self, op, value):
+        super().__init__(op, value)
+
+    @classmethod
+    def get(cls, approach):
+        return approach.velocity
