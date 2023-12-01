@@ -125,7 +125,7 @@ def create_filters(
         f_distance_min = ApproachDistanceFilter(operator.ge, distance_min)
         filters.append(f_distance_min)
     if distance_max is not None:
-        f_distance_max = ApproachDistanceFilter(operator.le, diameter_max)
+        f_distance_max = ApproachDistanceFilter(operator.le, distance_max)
         filters.append(f_distance_max)
     if velocity_min is not None:
         f_velocity_min = ApproachVelocityFilter(operator.ge, velocity_min)
