@@ -124,24 +124,24 @@ def create_filters(
     if distance_min is not None:
         f_distance_min = ApproachDistanceFilter(operator.ge, distance_min)
         filters.append(f_distance_min)
-    # if distance_max is not None:
-    #     f_distance_max = ApproachDistanceFilter(operator.le, diameter_max)
-    #     filters.append(f_distance_max)
-    # if velocity_min is not None:
-    #     f_velocity_min = ApproachVelocityFilter(operator.ge, velocity_min)
-    #     filters.append(f_velocity_min)
-    # if velocity_max is not None:
-    #     f_velocity_max = ApproachVelocityFilter(operator.le, velocity_max)
-    #     filters.append(f_velocity_max)
-    # if diameter_min is not None:
-    #     f_diameter_min = NeoDiameterFilter(operator.ge, diameter_min)
-    #     filters.append(f_diameter_min)
-    # # if diameter_max is not None:
-    #     f_diameter_max = NeoDiameterFilter(operator.le, diameter_max)
-    #     filters.append(f_diameter_max)
-    # if hazardous is not None:
-    #     f_hazardous = NeoHazardousFilter(operator.eq, hazardous)
-    #     filters.append(f_hazardous)
+    if distance_max is not None:
+        f_distance_max = ApproachDistanceFilter(operator.le, diameter_max)
+        filters.append(f_distance_max)
+    if velocity_min is not None:
+        f_velocity_min = ApproachVelocityFilter(operator.ge, velocity_min)
+        filters.append(f_velocity_min)
+    if velocity_max is not None:
+        f_velocity_max = ApproachVelocityFilter(operator.le, velocity_max)
+        filters.append(f_velocity_max)
+    if diameter_min is not None:
+        f_diameter_min = NeoDiameterFilter(operator.ge, diameter_min)
+        filters.append(f_diameter_min)
+    if diameter_max is not None:
+        f_diameter_max = NeoDiameterFilter(operator.le, diameter_max)
+        filters.append(f_diameter_max)
+    if hazardous is not None:
+        f_hazardous = NeoHazardousFilter(operator.eq, hazardous)
+        filters.append(f_hazardous)
     return filters
 
 
@@ -165,7 +165,15 @@ class NeoDiameterFilter(AttributeFilter):
 
     @classmethod
     def get(cls, approach):
-        return approach.neo.diameter
+        try:
+            diameter = float(approach.neo.diameter)
+        except TypeError as e:
+            print(e)
+            print(f"Cannot convert {approach.neo.diameter!r} to float.")
+            # raise TypeError
+            diameter = 0.0
+        finally:
+            return diameter
 
 
 class NeoHazardousFilter(AttributeFilter):
@@ -185,7 +193,14 @@ class ApproachDistanceFilter(AttributeFilter):
 
     @classmethod
     def get(cls, approach):
-        return approach.distance
+        try:
+            distance = float(approach.distance)
+        except TypeError as e:
+            print(e)
+            print(f"Distance cannot be obtained from close approach event {approach}.")
+            distance = 0.0
+        finally:
+            return distance
 
 
 class ApproachVelocityFilter(AttributeFilter):

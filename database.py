@@ -118,4 +118,4 @@ class NEODatabase:
         # for approach in self._approaches:
         #     yield approach
 
-        return (a for a in self._approaches if filters[0](a))
+        return (a for a in self._approaches if all(filter(a) for filter in filters))
