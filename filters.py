@@ -17,6 +17,7 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
+import datetime
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -142,6 +143,16 @@ def create_filters(
     if hazardous is not None:
         f_hazardous = NeoHazardousFilter(operator.eq, hazardous)
         filters.append(f_hazardous)
+    if date is not None:
+        f_exact_date = ApproachDateFilter(operator.eq, date)
+        filters.append(f_exact_date)
+    if start_date is not None:
+        f_from_date = ApproachDateFilter(operator.ge, start_date)
+        filters.append(f_from_date)
+    if end_date is not None:
+        f_until_date = ApproachDateFilter(operator.le, end_date)
+        filters.append(f_until_date)
+
     return filters
 
 
@@ -211,3 +222,20 @@ class ApproachVelocityFilter(AttributeFilter):
     @classmethod
     def get(cls, approach):
         return approach.velocity
+
+
+class ApproachDateFilter(AttributeFilter):
+
+    def __init__(self, op, value):
+        super().__init__(op, value)
+
+    @classmethod
+    def get(cls, approach):
+        try:
+            date = approach.time.date()
+        except TypeError as e:
+            print(e)
+            print(f"Approach time {approach.time} cannot be converted to date.")
+            date = datetime.date(1970, 1, 1)
+        finally:
+            return date
