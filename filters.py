@@ -181,7 +181,7 @@ class NeoDiameterFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Cannot convert {approach.neo.diameter!r} to float.")
-            # raise TypeError
+            # TODO: This doesnt really makes sense - decide how to handle missing diameter properly
             diameter = 0.0
         finally:
             return diameter
@@ -209,6 +209,7 @@ class ApproachDistanceFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Distance cannot be obtained from close approach event {approach}.")
+            # TODO: This doesnt really makes sense - decide how to handle missing distance properly
             distance = 0.0
         finally:
             return distance
@@ -236,6 +237,7 @@ class ApproachDateFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Approach time {approach.time} cannot be converted to date.")
+            # TODO: This doesnt really makes sense - decide how to handle missing dates properly
             date = datetime.date(1970, 1, 1)
         finally:
             return date
