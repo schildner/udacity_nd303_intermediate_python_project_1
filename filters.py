@@ -183,7 +183,7 @@ def limit(iterator, n=None):
             limited_stream.append(el)
         except StopIteration as e:
             print(e)
-            print("Reached last element, cant iterate further in the collection.")
+            print(f"Found {i} closed approaches matching your criteria which is less than the specified limit of {n}.")
             break
 
     return iter(limited_stream)
