@@ -166,7 +166,27 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    # TODO: The code below passes tests but Im not sure how to utilize yield,
+    #       and want to understand better what's been asked here.
+    #       Also what's the reference to itertools.islice ??
+    #       * Study in detail :-)
+    if n is None or n == 0:
+        return iterator
+
+    if type(iterator) is tuple:
+        iterator = iter(iterator)
+
+    limited_stream = []
+    for i in range(n):
+        try:
+            el = next(iterator)
+            limited_stream.append(el)
+        except StopIteration as e:
+            print(e)
+            print("Reached last element, cant iterate further in the collection.")
+            break
+
+    return iter(limited_stream)
 
 
 class NeoDiameterFilter(AttributeFilter):
