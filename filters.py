@@ -18,6 +18,7 @@ You'll edit this file in Tasks 3a and 3c.
 """
 import operator
 import datetime
+import itertools
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -165,28 +166,11 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
-    # TODO: The code below passes tests but Im not sure how to utilize yield,
-    #       and want to understand better what's been asked here.
-    #       Also what's the reference to itertools.islice ??
-    #       * Study in detail :-)
-    if n is None or n == 0:
-        return iterator
+    # TODO-> DONE: Produce at most `n` values from the given iterator.
+    if n:
+        return itertools.islice(iterator, n)
 
-    if type(iterator) is tuple:
-        iterator = iter(iterator)
-
-    limited_stream = []
-    for i in range(n):
-        try:
-            el = next(iterator)
-            limited_stream.append(el)
-        except StopIteration as e:
-            print(e)
-            print(f"Found {i} closed approaches matching your criteria which is less than the specified limit of {n}.")
-            break
-
-    return iter(limited_stream)
+    return iterator
 
 
 class NeoDiameterFilter(AttributeFilter):
