@@ -60,7 +60,10 @@ def load_approaches(cad_json_path):
         approach_datetime = row[3]    # cd item
         approach_distance = row[4]    # dist item
         relative_velocity = row[7]    # v_rel item
-        ca = CloseApproach(primary_designation, approach_datetime, float(approach_distance), float(relative_velocity))
+        ca = CloseApproach(primary_designation,
+                           approach_datetime,
+                           float(approach_distance),
+                           float(relative_velocity))
         close_approaches.append(ca)
 
     return close_approaches
