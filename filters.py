@@ -72,6 +72,7 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Human readable representation of the filter."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
@@ -172,12 +173,16 @@ def limit(iterator, n=None):
 
 
 class NeoDiameterFilter(AttributeFilter):
+    """Filters NEO by diameter."""
+
     # Beware: Diameter is often 'nan' - so value must be checked/handled accordingly
     def __init__(self, op, value):
+        """Construct a new `NeoDiameterFilter`."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
+        """Return the diameter of the NEO."""
         try:
             diameter = float(approach.neo.diameter)
         except TypeError as e:
@@ -191,22 +196,28 @@ class NeoDiameterFilter(AttributeFilter):
 
 
 class NeoHazardousFilter(AttributeFilter):
+    """Filters NEO by hazardous flag."""
 
     def __init__(self, op, value):
+        """Construct a new `NeoHazardousFilter`."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
+        """Return the hazardous flag of the NEO."""
         return approach.neo.hazardous
 
 
 class ApproachDistanceFilter(AttributeFilter):
+    """Filters approach by distance."""
 
     def __init__(self, op, value):
+        """Construct a new `ApproachDistanceFilter`."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
+        """Return the distance of the approach."""
         try:
             distance = float(approach.distance)
         except TypeError as e:
@@ -220,22 +231,28 @@ class ApproachDistanceFilter(AttributeFilter):
 
 
 class ApproachVelocityFilter(AttributeFilter):
+    """Filters approach by velocity."""
 
     def __init__(self, op, value):
+        """Construct a new `ApproachVelocityFilter`."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
+        """Return the velocity of the approach."""
         return approach.velocity
 
 
 class ApproachDateFilter(AttributeFilter):
+    """Filters approach by date."""
 
     def __init__(self, op, value):
+        """Construct a new `ApproachDateFilter`."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
+        """Return the date of the approach."""
         try:
             date = approach.time.date()
         except TypeError as e:
