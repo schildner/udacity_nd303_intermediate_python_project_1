@@ -40,6 +40,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -110,10 +111,7 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
-    #
-    # NOTES to myself:
-    # - Filters vary:
+    # The filters vary:
     #   * CloseApproach object filters:
     #     1. distance (float)
     #     2. velocity (float)
@@ -166,7 +164,7 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO-> DONE: Produce at most `n` values from the given iterator.
+    # Produce at most `n` values from the given iterator.
     if n:
         return itertools.islice(iterator, n)
 
@@ -185,7 +183,8 @@ class NeoDiameterFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Cannot convert {approach.neo.diameter!r} to float.")
-            # TODO: This doesnt really makes sense - decide how to handle missing diameter properly
+            # Possible improvement:
+            # Decide how to handle missing diameter properly.
             diameter = 0.0
         finally:
             return diameter
@@ -213,7 +212,8 @@ class ApproachDistanceFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Distance cannot be obtained from close approach event {approach}.")
-            # TODO: This doesnt really makes sense - decide how to handle missing distance properly
+            # Possible improvement:
+            # Decide how to handle missing distance properly.
             distance = 0.0
         finally:
             return distance
@@ -241,7 +241,8 @@ class ApproachDateFilter(AttributeFilter):
         except TypeError as e:
             print(e)
             print(f"Approach time {approach.time} cannot be converted to date.")
-            # TODO: This doesnt really makes sense - decide how to handle missing dates properly
+            # Possible improvement:
+            # Decide how to handle missing dates properly
             date = datetime.date(1970, 1, 1)
         finally:
             return date
