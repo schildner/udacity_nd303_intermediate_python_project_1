@@ -13,6 +13,8 @@ You'll edit this file in Part 4.
 import csv
 import json
 
+from helpers import datetime_to_str
+
 
 def write_to_csv(results, filename):
     """Write an iterable of `CloseApproach` objects to a CSV file.
@@ -28,7 +30,20 @@ def write_to_csv(results, filename):
         'datetime_utc', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
-    # TODO: Write the results to a CSV file, following the specification in the instructions.
+    # TODO-> DONE: Write the results to a CSV file, following the specification in the instructions.
+    with open(filename, 'w') as f:
+        writer = csv.DictWriter(f, fieldnames)
+        writer.writeheader()
+        for r in results:
+            name = r.neo.name if r.neo.name is not None else ''
+            designation = r.neo.designation if r.neo.designation is not None else ''
+            writer.writerow({fieldnames[0]: str(r.time),
+                            fieldnames[1]: r.distance,
+                            fieldnames[2]: r.velocity,
+                            fieldnames[3]: designation,
+                            fieldnames[4]: name,
+                            fieldnames[5]: r.neo.diameter,
+                            fieldnames[6]: str(r.neo.hazardous)})
 
 
 def write_to_json(results, filename):
@@ -42,4 +57,24 @@ def write_to_json(results, filename):
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
-    # TODO: Write the results to a JSON file, following the specification in the instructions.
+    # TODO-> DONE: Write the results to a JSON file, following the specification in the instructions.
+    with open(filename, 'w') as f:
+        results_obj = []
+
+        for r in results:
+            name = r.neo.name if r.neo.name is not None else ''
+            designation = r.neo.designation if r.neo.designation is not None else ''
+
+            neodict = {'designation': designation,
+                       'name': name,
+                       'diameter_km': r.neo.diameter,
+                       'potentially_hazardous': r.neo.hazardous}
+
+            entry = {'datetime_utc': datetime_to_str(r.time),
+                     'distance_au': r.distance,
+                     'velocity_km_s': r.velocity,
+                     'neo': neodict}
+
+            results_obj.append(entry)
+
+        json.dump(results_obj, f, indent=2)

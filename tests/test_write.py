@@ -36,8 +36,8 @@ TEST_CAD_FILE = TESTS_ROOT / 'test-cad-2020.json'
 
 
 def build_results(n):
-    neos = tuple(load_neos(TEST_NEO_FILE))
-    approaches = tuple(load_approaches(TEST_CAD_FILE))
+    neos = load_neos(TEST_NEO_FILE)
+    approaches = load_approaches(TEST_CAD_FILE)
 
     # Only needed to link together these objects.
     NEODatabase(neos, approaches)
@@ -101,7 +101,6 @@ class TestWriteToCSV(unittest.TestCase):
             return
         except csv.Error as err:
             raise self.failureException("Unable to sniff for headers.") from err
-
 
     def test_csv_data_has_five_rows(self):
         # Now, we have the value in memory, and can _actually_ start testing.
